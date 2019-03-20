@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Charts app</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="chart_data.json"></script>
+        <script>
+            function readJson (file, callback) {
+                    var raw = new XMLHttpRequest();
+                    raw.overrideMimeType("application/json");
+                    raw.open("GET", file, true);
+                    raw.onreadystatechange = function() {
+                        if (raw.readyState === 4 && raw.status == "200") {
+                        callback(raw.responseText);
+                        }
+                    }
+                    raw.send("http");
+                }
+            
+            function Draw() {
+                var canvas = document.getElementById('chart');
+                var ctx = canvas.getContext('2d');
+                
+                ctx.fillStyle = 'rgb(200, 0, 0)';
+                ctx.fillRect(10, 10, 50, 50);
+
+                ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
+                ctx.fillRect(30, 30, 50, 50);
+
+                var data;
+
+                readJson("chart_data.json", function(text){
+                    data = JSON.parse(text);
+                    // for(dot in data[0]["columns"])
+                    // {
+                    //     console.log(dot);
+                    // }
+
+                    //console.log(data[0]["columns"]);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(0,0);
+                    for(var i = 0; i < 113; i++) {
+                        ctx.lineTo(data[0]["columns"][0][i], data[0]["columns"][1][i]);
+                        console.log(data[0]["columns"][0][i] + ", " + data[0]["columns"][1][i])
+                    }
+                    ctx.closePath();
+                    ctx.stroke();
+
+                    //testline
+                    ctx.beginPath();
+                    ctx.moveTo(0,0);
+                    ctx.lineTo(100,100);
+                    ctx.closePath();
+                    ctx.stroke();
+                });
+
+                // ctx.beginPath();
+                // ctx.moveTo(0,0);
+                
+                // $.getJSON('test_data.json', function(data) {
+                //   console.log(data);
+                // });
+            }
+        </script>
+
+        <style type="text/css">
+            canvas 
+            { 
+                border: 2px solid black; 
+            }
+
+            #contentHoler
+            {
+                align-content: center;
+                align-items: center;
+                align-self: center;
+            }
+        </style>
+    </head>
+    <body onload="Draw()">
+        <div id="contentHolder">
+            <canvas id="chart" width="800" height="600">ass</canvas>
+            <canvas id="scroller" width="800" height="100">ass</canvas>
+        </div>
+    </body>
+</html>
